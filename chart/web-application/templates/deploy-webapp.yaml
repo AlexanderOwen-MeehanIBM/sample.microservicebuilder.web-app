@@ -1,7 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: microservice-webapp-sample
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
   replicas: 1
   template:
@@ -10,8 +12,8 @@ spec:
         name: webapp-deployment
     spec:
       containers:
-      - name: microservice-webapp
-        image: web-application:latest
+      - name: web-application
+        image: {{ default "web-application:latest" .Values.image }}
         ports:
           - containerPort: 9080
         imagePullPolicy: IfNotPresent
